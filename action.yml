@@ -35,7 +35,7 @@ runs:
          echo "result=some stuff" >> $GITHUB_OUTPUT
       shell: bash
       env:
-        SECRET1: ${{ fromJSON(inputs.secrets).SECRET1 }}
+        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
         SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}
     - name: Json Extended Operations
@@ -52,7 +52,7 @@ runs:
           echo "has-extended-ops-results=true" >> $GITHUB_OUTPUT
       shell: bash
       env:
-        SECRET1: ${{ fromJSON(inputs.secrets).SECRET1 }}
+        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
         SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}        
 
