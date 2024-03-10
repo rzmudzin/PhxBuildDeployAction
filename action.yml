@@ -58,8 +58,9 @@ runs:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}    
-      if: env.IS_ENTERPRISE_APP == 'true'
+        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}   
+        # if: inputs.job-type == 'Build IPA' || inputs.job-type == 'Deployment'
+      if: env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment'
       run: |          
         echo "Packaging For Job Type: ${JOB_TYPE}"
         if ${IS_ENTERPRISE_APP} == "true"; then
@@ -74,3 +75,27 @@ runs:
         echo "newBuildNumber: ${newBuildNumber}" >> "${IPA_PATH}/changes.txt"
         find "${ARCHIVE_PATH}" -name "*" > results.txt
         find "${IPA_PATH}" -name "*" >> results.txt  
+
+      - name: Upload Package
+        if: env.JOB_TYPE == 'Deployment'
+        run: |    
+          if ${IS_ENTERPRISE_APP} == "true"; then
+            echo "Uploading To App Center..."  
+            appcenter distribute release --app "rzmudzin-s9j5/Matrix" --file "${IPA_PATH}/MemoryMatrix.ipa" --release-notes-file "${IPA_PATH}/changes.txt" --token f8ce02d0928ad5364cadbf43545707805c9d1660 --group "Collaborators"
+          else
+            echo "Uploading To Apple App Store..."  
+            ./scripts/upload.sh -b "${newBuildNumber}" -v "$appVersion" -i "$ascIssuerId" -k "$ascKeyId" -p "${IPA_PATH}/MemoryMatrix.ipa"
+          fi
+          
+      - name: Attach Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: results.txt
+          
+      # - name: Attach IPA
+      #   if: inputs.attach-ipa == true && (inputs.job-type == 'Build IPA'|| inputs.job-type == 'Deployment')
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: MemoryMatrix
+      #     path: "${{ env.IPA_PATH }}/MemoryMatrix.ipa"
