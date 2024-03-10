@@ -56,15 +56,6 @@ runs:
         FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
         SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}        
 
-
-  build:
-  
-    env:
-      SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-      IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).inputs.enterprise-app }}
-      RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
-    runs-on: ["self-hosted", "x${RUNNER}"]
-    steps:
       - name: Calculate New Build Number
         run: |
             newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
@@ -76,6 +67,12 @@ runs:
         with:
           submodules: recursive
       - name: Build
+
+        env:
+          SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+          IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).inputs.enterprise-app }}
+          RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
+      
         run: |
         #   echo "Building..."
         #   pwd
