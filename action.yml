@@ -68,7 +68,7 @@ runs:
       shell: bash
       env:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).inputs.enterprise-app }}
+        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
       run: |
         echo "Building..."
@@ -77,3 +77,4 @@ runs:
         # echo "appVersion: $appVersion"
         # echo "newBuildNumber: ${newBuildNumber}"
         echo "Is Enterprise App: ${IS_ENTERPRISE_APP}"        
+        echo "Runner" ${RUNNER}"
