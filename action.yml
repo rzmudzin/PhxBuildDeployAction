@@ -92,7 +92,7 @@ runs:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-      if: ${IS_ENTERPRISE_APP} == "true"
+      if: ${{ fromJSON(inputs.actionInputs).enterprise-app }} == "true"
       run: |          
          echo "Packaging For Job Type"
         # echo "Packaging For Job Type: ${{ inputs.job-type }}"
