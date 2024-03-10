@@ -24,6 +24,7 @@ runs:
   using: "composite"
   steps:
     - name: Calculate New Build Number
+      shell: bash
       run: |
           newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
           echo "New Build Number: $newBuildNumber"
