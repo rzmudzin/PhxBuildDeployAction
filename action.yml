@@ -23,6 +23,11 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Calculate New Build Number
+      run: |
+          newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
+          echo "New Build Number: $newBuildNumber"
+          echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV   
     - name: Json Operations
       id: json-ops
       run: |
@@ -56,9 +61,5 @@ runs:
         FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
         SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}        
 
-    - name: Calculate New Build Number
-      run: |
-          newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
-          echo "New Build Number: $newBuildNumber"
-          echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV    
+   
 
