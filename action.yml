@@ -80,10 +80,10 @@ runs:
         echo "Runner ${RUNNER}"
         if ${IS_ENTERPRISE_APP} == "true"; then
           echo "Enterprise App"
-          ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "iPhone Distribution: Phoenix Roberts LLC" -M dae3007d-dbd8-4f85-bfbd-5cbef813cd3b -s "Enterprise MemoryMatrix" -c "Enterprise Release" -i "${ARCHIVE_PATH}"
+          # ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "iPhone Distribution: Phoenix Roberts LLC" -M dae3007d-dbd8-4f85-bfbd-5cbef813cd3b -s "Enterprise MemoryMatrix" -c "Enterprise Release" -i "${ARCHIVE_PATH}"
         else
           echo "App Store App"
-          ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "Apple Distribution: Robert Zmudzinski (LK58XLFP48)" -M cc7c62a4-7417-4578-b2f0-30b5f8fd50fe -s "MemoryMatrix" -c "Release" -i "${ARCHIVE_PATH}"
+          # ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "Apple Distribution: Robert Zmudzinski (LK58XLFP48)" -M cc7c62a4-7417-4578-b2f0-30b5f8fd50fe -s "MemoryMatrix" -c "Release" -i "${ARCHIVE_PATH}"
         fi          
 
     - name: Package
@@ -92,7 +92,8 @@ runs:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-      if: ${{ fromJSON(inputs.actionInputs).enterprise-app }} == "true"
+      # if: ${{ fromJSON(inputs.actionInputs).enterprise-app }} == "true"
+      if: env.IS_ENTERPRISE_APP == 'true'
       run: |          
          echo "Packaging For Job Type"
         # echo "Packaging For Job Type: ${{ inputs.job-type }}"
