@@ -77,6 +77,7 @@ runs:
         find "${IPA_PATH}" -name "*" >> results.txt  
 
       - name: Upload Package
+        shell: bash
         if: env.JOB_TYPE == 'Deployment'
         run: |    
           if ${IS_ENTERPRISE_APP} == "true"; then
@@ -88,6 +89,7 @@ runs:
           fi
           
       - name: Attach Results
+        shell: bash
         uses: actions/upload-artifact@v2
         with:
           name: results
