@@ -23,47 +23,13 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Json Operations
-      id: json-ops
-      run: |
-         echo App: ${{ env.appName }}
-         echo "Extended Ops Enabled? ${{ inputs.enable-extended-ops || false }}"
-         echo "Extended Ops Enabled? ${{ inputs.enable-extended-ops }}"
-         echo "Json Action Working Directory: ${GITHUB_WORKSPACE}"
-         echo "Json Ops First Number ${FIRST_NUMBER}"
-         echo "Json Ops Second Number: ${SECOND_NUMBER}"
-         echo "result=some stuff" >> $GITHUB_OUTPUT
-      shell: bash
-      env:
-        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-        FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
-        SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}
-    - name: Json Extended Operations
-      # if: ${{ inputs.enable-extended-ops || false }} == 'true'
-      if: inputs.enable-extended-ops == 'true'
-      id: json-extended-ops
-      run: |
-         echo inputs.enable-extended-ops: ${{ inputs.enable-extended-ops }}
-         echo "Json Extended Ops First Number ${FIRST_NUMBER}"
-         echo "Json Extended Ops Second Number: ${SECOND_NUMBER}"
-         echo "extended-ops-info=things and such" >> $GITHUB_OUTPUT
-         echo "extended-ops-data=Maybe a larger payload, maybe in json" >> $GITHUB_OUTPUT
-         echo "extended-ops-results-path=Path to some folder" >> $GITHUB_OUTPUT
-          echo "has-extended-ops-results=true" >> $GITHUB_OUTPUT
-      shell: bash
-      env:
-        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-        FIRST_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-first-value }}
-        SECOND_NUMBER: ${{ fromJSON(inputs.actionInputs).add-action-second-value }}        
-
-   
-
     - name: Calculate New Build Number
       shell: bash
       run: |
           newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
           echo "New Build Number: $newBuildNumber"
           echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV   
+          
     - name: Build
       shell: bash
       env:
