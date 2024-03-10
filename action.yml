@@ -23,12 +23,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Calculate New Build Number
-      shell: bash
-      run: |
-          newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
-          echo "New Build Number: $newBuildNumber"
-          echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV   
     - name: Json Operations
       id: json-ops
       run: |
@@ -64,3 +58,31 @@ runs:
 
    
 
+    - name: Calculate New Build Number
+      shell: bash
+      run: |
+          newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
+          echo "New Build Number: $newBuildNumber"
+          echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV   
+      - name: Build
+        shell: bash
+        env:
+          SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+          IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).inputs.enterprise-app }}
+          RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
+        run: |
+          echo "Building..."
+        # #   pwd
+        # #   ls -lah
+          echo "Archive Path: ${ARCHIVE_PATH}"          
+          echo "Workflow: ${{github.workflow}}"
+          echo "appVersion: $appVersion"
+          echo "newBuildNumber: ${newBuildNumber}"
+          echo "Is Enterprise App: ${IS_ENTERPRISE_APP}"
+          if ${IS_ENTERPRISE_APP} == "true"; then
+            echo "Enterprise App"
+            # ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "iPhone Distribution: Phoenix Roberts LLC" -M dae3007d-dbd8-4f85-bfbd-5cbef813cd3b -s "Enterprise MemoryMatrix" -c "Enterprise Release" -i "${ARCHIVE_PATH}"
+          else
+            echo "App Store App"
+            # ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "Apple Distribution: Robert Zmudzinski (LK58XLFP48)" -M cc7c62a4-7417-4578-b2f0-30b5f8fd50fe -s "MemoryMatrix" -c "Release" -i "${ARCHIVE_PATH}"
+          fi          
