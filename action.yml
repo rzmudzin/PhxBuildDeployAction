@@ -72,4 +72,8 @@ runs:
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
       run: |
         echo "Building..."
-        
+        echo "Archive Path: ${ARCHIVE_PATH}"          
+        echo "Workflow: ${{github.workflow}}"
+        # echo "appVersion: $appVersion"
+        # echo "newBuildNumber: ${newBuildNumber}"
+        echo "Is Enterprise App: ${IS_ENTERPRISE_APP}"        
