@@ -58,8 +58,6 @@ runs:
 
 
   build:
-    if: inputs.build-using-composite-action != true 
-    needs: [inputs-validation]
     runs-on: ["self-hosted", "x${{inputs.runner}}"]
     steps:
       - name: Calculate New Build Number
@@ -67,19 +65,7 @@ runs:
             newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
             echo "New Build Number: $newBuildNumber"
             echo "newBuildNumber=$newBuildNumber" >> $GITHUB_ENV    
-      - name: Download artifact
-        if: ${{ false }}
-        id: download-artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-        # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
-        # Required, if the artifact is from a different repo
-        # Required, if the repo is private a Personal Access Token with `repo` scope is needed
-         github_token: ${{secrets.GITHUB_TOKEN}}
-         # Optional, workflow file name or ID
-         # If not specified, will be inferred from run_id (if run_id is specified), or will be the current workflow
-         workflow: composite-workflow.yml
-         name: timestamp    
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
@@ -89,7 +75,7 @@ runs:
         #   echo "Building..."
         #   pwd
         #   ls -lah
-          
+          echo "Archive Path: ${ARCHIVE_PATH}"          
           echo "Workflow: ${{github.workflow}}"
           echo "appVersion: $appVersion"
           echo "newBuildNumber: ${newBuildNumber}"
