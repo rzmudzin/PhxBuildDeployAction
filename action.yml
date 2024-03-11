@@ -96,7 +96,7 @@ runs:
 
     - name: Upload Package
       shell: bash
-      if: ${RUN_JOB_TYPE} == 'Deployment'
+      if: "${RUN_JOB_TYPE}" == "Deployment"
       run: |    
         if ${IS_ENTERPRISE_APP} == "true"; then
           echo "Uploading To App Center..."  
