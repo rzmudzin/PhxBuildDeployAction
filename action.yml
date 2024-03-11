@@ -42,16 +42,21 @@ runs:
           
     - name: Build
       shell: bash
+
       env:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
-        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}
+        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
+        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
       run: |
         echo "Building..."
+        echo "Job Type: ${JOB_TYPE}"
+        echo "Attach IPA: ${ATTACH_IPA}"
         echo "Archive Path: ${ARCHIVE_PATH}"          
         echo "Workflow: ${{github.workflow}}"
-        # echo "appVersion: $appVersion"
-        # echo "newBuildNumber: ${newBuildNumber}"
+        echo "appVersion: $appVersion"
+        echo "newBuildNumber: ${newBuildNumber}"
         echo "Is Enterprise App: ${IS_ENTERPRISE_APP}"        
         echo "Runner ${RUNNER}"
         if ${IS_ENTERPRISE_APP} == "true"; then
@@ -109,7 +114,7 @@ runs:
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
         JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
-        ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
       # if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')    
       # if: fromJSON(inputs.actionInputs).attach-ipa == true && (fromJSON(inputs.actionInputs).job-type == 'Build IPA'|| fromJSON(inputs.actionInputs).job-type == 'Deployment')
       if: (env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment') && fromJSON(inputs.actionInputs).attach-ipa == true
