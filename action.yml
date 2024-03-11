@@ -22,15 +22,17 @@ outputs:
     value: ${{ steps.json-extended-ops.outputs.has-extended-ops-results || false }}
 
 
-env:
+# env:
   # SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
   # IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
   # RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
   # JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
-  ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+  # ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
 # if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
     
 runs:
+  env:
+    TEST: "meh"
   using: "composite"
   steps:
     - name: Calculate New Build Number
