@@ -59,7 +59,6 @@ runs:
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
         JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}   
-        # if: inputs.job-type == 'Build IPA' || inputs.job-type == 'Deployment'
       if: env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment'
       run: |          
         echo "Packaging For Job Type: ${JOB_TYPE}"
@@ -95,7 +94,13 @@ runs:
         path: results.txt
         
     - name: Attach IPA
-      if: inputs.attach-ipa == true && (inputs.job-type == 'Build IPA'|| inputs.job-type == 'Deployment')
+      env:
+        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
+        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
+        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+      # if: inputs.attach-ipa == true && (inputs.job-type == 'Build IPA'|| inputs.job-type == 'Deployment')
       uses: actions/upload-artifact@v2
       with:
         name: MemoryMatrix
