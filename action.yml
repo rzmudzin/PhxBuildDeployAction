@@ -54,6 +54,7 @@ runs:
       run: |
         echo "Building..."
         echo "Job Type: ${JOB_TYPE}"
+        echo "Run Job Type: ${RUN_JOB_TYPE}"
         echo "Attach IPA: ${ATTACH_IPA}"
         echo "Attach IPA To Run: ${RUN_ATTACH_IPA}"
         echo "Archive Path: ${ARCHIVE_PATH}"          
@@ -95,7 +96,7 @@ runs:
 
     - name: Upload Package
       shell: bash
-      if: env.JOB_TYPE == 'Deployment'
+      if: ${RUN_JOB_TYPE} == 'Deployment'
       run: |    
         if ${IS_ENTERPRISE_APP} == "true"; then
           echo "Uploading To App Center..."  
