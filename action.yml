@@ -87,10 +87,11 @@ runs:
       if: env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment'
       run: |          
         echo "Packaging For Job Type: ${JOB_TYPE}"
-        if ${IS_ENTERPRISE_APP} == "true"; then
+        if ${{ inputs.is-enterprise-app-build }} == "true"; then
           echo "Creating Enterprise Package..."
           xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${IPA_PATH}" -exportOptionsPlist ./export-enterprise.plist
-        else 
+        fi
+        if ${{ inputs.is-enterprise-app-build }} == "false"; then
           echo "Creating App Store Package..."
           xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${IPA_PATH}" -exportOptionsPlist ./export-appstore.plist     
         fi
@@ -104,10 +105,11 @@ runs:
       shell: bash
       if: fromJSON(inputs.actionInputs).job-type == 'Deployment'
       run: |    
-        if ${RUN_IS_ENTERPRISE_APP} == "true"; then
+        if ${{ inputs.is-enterprise-app-build }} == "true"; then
           echo "Uploading To App Center..."  
           appcenter distribute release --app "rzmudzin-s9j5/Matrix" --file "${IPA_PATH}/MemoryMatrix.ipa" --release-notes-file "${IPA_PATH}/changes.txt" --token f8ce02d0928ad5364cadbf43545707805c9d1660 --group "Collaborators"
-        else
+        fi
+        if ${{ inputs.is-enterprise-app-build }} == "false"; then
           echo "Uploading To Apple App Store..."  
           ./scripts/upload.sh -b "${newBuildNumber}" -v "$appVersion" -i "$ascIssuerId" -k "$ascKeyId" -p "${IPA_PATH}/MemoryMatrix.ipa"
         fi
@@ -130,5 +132,5 @@ runs:
       if: (env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment') && env.ATTACH_IPA == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: MemoryMatrix
+        name: "MemoryMatrix${{ inputs.is-enterprise-app-build }}"
         path: "${{ env.IPA_PATH }}/MemoryMatrix.ipa"
