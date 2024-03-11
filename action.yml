@@ -42,6 +42,13 @@ runs:
           echo "RUN_IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}" >> results.txt
           echo "RUN_JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}" >> results.txt
           echo "RUN_ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}" >> results.txt
+
+          if ${{ inputs.is-enterprise-app-build }} == "true"; then
+            echo "An Enterprise App Build"
+          fi
+          if ${{ inputs.is-enterprise-app-build }} == "false"; then
+            echo "An App Store App Build"
+          fi
           
     - name: Calculate New Build Number
       shell: bash
