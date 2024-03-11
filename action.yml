@@ -25,7 +25,7 @@ outputs:
 runs:
   using: "composite"
   steps:
-  - name: Set Env
+    - name: Set Env
       shell: bash
       env:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
