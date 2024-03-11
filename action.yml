@@ -20,14 +20,21 @@ outputs:
   has-extended-outputs:
     description: "Has Json Extended Composite Action Outputs"
     value: ${{ steps.json-extended-ops.outputs.has-extended-ops-results || false }}
+
+jobs:   
+ simple-job:
+   runs-on: macOS-latest
+   steps:
+   - name: A Simple Job
+     run: |
+       echo "Running simple job"  
+       echo "Done"
     
 runs:
   using: "composite"
   steps:
     - name: Calculate New Build Number
       shell: bash
-      env:
-        ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }} 
       run: |
           newBuildNumber=$(echo $((${{env.buildNumberBase}}+${{github.run_number}})))
           echo "New Build Number: $newBuildNumber"
@@ -40,8 +47,7 @@ runs:
         SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
         IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
         RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
-        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}          
       run: |
         echo "Building..."
         echo "Job Type: ${JOB_TYPE}"
