@@ -93,7 +93,7 @@ runs:
         name: results
         path: results.txt
         
-    # - name: Attach IPA
+    - name: Attach IPA
     #   env:
     #     SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
     #     IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
