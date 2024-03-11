@@ -93,14 +93,15 @@ runs:
         name: results
         path: results.txt
         
-    - name: Attach IPA
-      env:
-        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
-        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
-        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
-      if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
+    # - name: Attach IPA
+    #   env:
+    #     SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+    #     IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
+    #     RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+    #     JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
+    #     ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+    #   if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
+      if: fromJSON(inputs.actionInputs).attach-ipa == true
       uses: actions/upload-artifact@v2
       with:
         name: MemoryMatrix
