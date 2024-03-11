@@ -27,13 +27,16 @@ runs:
   steps:
     - name: Set Env
       shell: bash
-      env:
-        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
-        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}    
-        ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}
+      # env:
+      #   SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+      #   IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
+      #   RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+      #   JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}    
+      #   ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}
       run: |
+          echo "RUN_SECRET_SECRET1=${{ fromJSON(inputs.secrets).DESC }}" >> $GITHUB_ENV   
+          echo "RUN_IS_ENTERPRISE_APP=${{ fromJSON(inputs.actionInputs).enterprise-app }}" >> $GITHUB_ENV   
+          echo "RUN_RUNNER_TYPE=${{ fromJSON(inputs.actionInputs).runner }}" >> $GITHUB_ENV   
           echo "RUN_JOB_TYPE=${{ fromJSON(inputs.actionInputs).job-type }}" >> $GITHUB_ENV   
           echo "RUN_ATTACH_IPA=${{ fromJSON(inputs.actionInputs).attach-ipa }}" >> $GITHUB_ENV
           
@@ -98,7 +101,7 @@ runs:
       shell: bash
       if: fromJSON(inputs.actionInputs).job-type == 'Deployment'
       run: |    
-        if ${IS_ENTERPRISE_APP} == "true"; then
+        if ${RUN_IS_ENTERPRISE_APP} == "true"; then
           echo "Uploading To App Center..."  
           appcenter distribute release --app "rzmudzin-s9j5/Matrix" --file "${IPA_PATH}/MemoryMatrix.ipa" --release-notes-file "${IPA_PATH}/changes.txt" --token f8ce02d0928ad5364cadbf43545707805c9d1660 --group "Collaborators"
         else
