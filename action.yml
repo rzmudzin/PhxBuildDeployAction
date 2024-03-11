@@ -20,6 +20,16 @@ outputs:
   has-extended-outputs:
     description: "Has Json Extended Composite Action Outputs"
     value: ${{ steps.json-extended-ops.outputs.has-extended-ops-results || false }}
+
+
+env:
+  # SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+  # IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
+  # RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+  # JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
+  ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+# if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
+    
 runs:
   using: "composite"
   steps:
@@ -94,13 +104,6 @@ runs:
         path: results.txt
         
     - name: Attach IPA
-    #   env:
-    #     SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-    #     IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
-    #     RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-    #     JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
-    #     ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
-    #   if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
       if: fromJSON(inputs.actionInputs).attach-ipa == true && (fromJSON(inputs.actionInputs).job-type == 'Build IPA'|| fromJSON(inputs.actionInputs).job-type == 'Deployment')
       uses: actions/upload-artifact@v2
       with:
