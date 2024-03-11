@@ -31,8 +31,6 @@ outputs:
 # if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')
     
 runs:
-  env:
-    TEST: "meh"
   using: "composite"
   steps:
     - name: Calculate New Build Number
@@ -106,7 +104,15 @@ runs:
         path: results.txt
         
     - name: Attach IPA
-      if: fromJSON(inputs.actionInputs).attach-ipa == true && (fromJSON(inputs.actionInputs).job-type == 'Build IPA'|| fromJSON(inputs.actionInputs).job-type == 'Deployment')
+      env:
+        SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
+        IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
+        RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
+        JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}       
+        ATTACH_IPA_TO_RUN: ${{ fromJSON(inputs.actionInputs).attach-ipa }}       
+      # if: env.ATTACH_IPA == true && (env.JOB_TYPE == 'Build IPA'|| env.JOB_TYPE == 'Deployment')    
+      # if: fromJSON(inputs.actionInputs).attach-ipa == true && (fromJSON(inputs.actionInputs).job-type == 'Build IPA'|| fromJSON(inputs.actionInputs).job-type == 'Deployment')
+      if: env.JOB_TYPE == "Build IPA"
       uses: actions/upload-artifact@v2
       with:
         name: MemoryMatrix
