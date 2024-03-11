@@ -7,6 +7,10 @@ inputs:
   actionInputs:
     description: 'Inputs'
     required: true
+  is-enterprise-app-build:
+    type: boolean
+    description: Enterprise App Build
+    required: true
   enable-extended-ops:
     type: boolean
     description: Enable Extended Ops
