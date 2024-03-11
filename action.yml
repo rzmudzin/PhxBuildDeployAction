@@ -31,12 +31,6 @@ runs:
   steps:
     - name: Set Env Inputs
       shell: bash
-      # env:
-      #   SECRET1: ${{ fromJSON(inputs.secrets).DESC }}
-      #   IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}
-      #   RUNNER: ${{ fromJSON(inputs.actionInputs).runner }}    
-      #   JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}    
-      #   ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}
       run: |
           echo "RUN_SECRET_SECRET1=${{ fromJSON(inputs.secrets).DESC }}" >> $GITHUB_ENV   
           echo "RUN_IS_ENTERPRISE_APP=${{ fromJSON(inputs.actionInputs).enterprise-app }}" >> $GITHUB_ENV   
