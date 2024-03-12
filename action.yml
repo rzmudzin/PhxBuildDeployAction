@@ -37,11 +37,13 @@ runs:
           echo "RUN_RUNNER_TYPE=${{ fromJSON(inputs.actionInputs).runner }}" >> $GITHUB_ENV   
           echo "RUN_JOB_TYPE=${{ fromJSON(inputs.actionInputs).job-type }}" >> $GITHUB_ENV   
           echo "RUN_ATTACH_IPA=${{ fromJSON(inputs.actionInputs).attach-ipa }}" >> $GITHUB_ENV
+          echo "RUN_ENTERPRISE_PROVISIONING_PROFILE=${{ fromJSON(inputs.actionInputs).enterprise-provisioning-profile }}" >> $GITHUB_ENV
 
           echo "RUN_IS_ENTERPRISE_APP_BUILD: ${{ inputs.is-enterprise-app-build }}" > results.txt
           echo "RUN_IS_ENTERPRISE_APP: ${{ fromJSON(inputs.actionInputs).enterprise-app }}" >> results.txt
           echo "RUN_JOB_TYPE: ${{ fromJSON(inputs.actionInputs).job-type }}" >> results.txt
           echo "RUN_ATTACH_IPA: ${{ fromJSON(inputs.actionInputs).attach-ipa }}" >> results.txt
+          echo "RUN_ENTERPRISE_PROVISIONING_PROFILE: ${{ fromJSON(inputs.actionInputs).enterprise-provisioning-profile }}" >> results.txt
           
     - name: Calculate New Build Number
       shell: bash
@@ -70,7 +72,7 @@ runs:
         echo "Runner ${RUNNER}"
         if [ "${{ inputs.is-enterprise-app-build }}" = "true" ]; then
           echo "Enterprise App"
-          ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "iPhone Distribution: Phoenix Roberts LLC" -M dae3007d-dbd8-4f85-bfbd-5cbef813cd3b -s "Enterprise MemoryMatrix" -c "Enterprise Release" -i "${ARCHIVE_PATH}"
+          ./scripts/deploy.sh -b "${newBuildNumber}" -v "$appVersion" -S "iPhone Distribution: Phoenix Roberts LLC" -M ${RUN_ENTERPRISE_PROVISIONING_PROFILE} -s "Enterprise MemoryMatrix" -c "Enterprise Release" -i "${ARCHIVE_PATH}"
         fi
         if [ "${{ inputs.is-enterprise-app-build }}" = "false" ]; then
           echo "App Store App"
