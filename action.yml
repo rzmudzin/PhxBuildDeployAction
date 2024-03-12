@@ -117,7 +117,7 @@ runs:
     - name: Attach Results
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.is-enterprise-app-build && 'results-enterprise' ||  'results-appstore'  }}
+        name: ${{ inputs.is-enterprise-app-build == 'true' && 'results-enterprise' ||  'results-appstore'  }}
         path: results.txt
         
     - name: Attach IPA
