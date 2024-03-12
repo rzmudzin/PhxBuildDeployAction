@@ -117,7 +117,7 @@ runs:
     - name: Attach Results
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ inputs.is-enterprise-app-build == 'true' && 'results-enterprise' ||  'results-appstore'  }}
+        name: ${{ inputs.is-enterprise-app-build == 'true' && 'Results-Enterprise' ||  'Results-AppStore'  }}
         path: results.txt
         
     - name: Attach IPA
@@ -132,5 +132,5 @@ runs:
       if: (env.JOB_TYPE == 'Build IPA' || env.JOB_TYPE == 'Deployment') && env.ATTACH_IPA == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: "MemoryMatrix${{ inputs.is-enterprise-app-build }}"
+        name: ${{ inputs.is-enterprise-app-build == 'true' && 'MemoryMatrix-Enterprise' ||  'MemoryMatrix-AppStore'  }}
         path: "${{ env.IPA_PATH }}/MemoryMatrix.ipa"
