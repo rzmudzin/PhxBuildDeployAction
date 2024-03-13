@@ -93,6 +93,7 @@ runs:
         echo "Packaging For Job Type: ${JOB_TYPE}"
         if [ "${{ inputs.is-enterprise-app-build }}" = "true" ]; then
           echo "Creating Enterprise Package..."
+          eval /usr/libexec/PlistBuddy -c "'Set :signingCertificate $RUN_ENTERPRISE_SIGNING_CERTIFICATE'" ./export-enterprise.plist
           xcodebuild -exportArchive -archivePath "${ARCHIVE_PATH}" -exportPath "${IPA_PATH}" -exportOptionsPlist ./export-enterprise.plist
         fi
         if [ "${{ inputs.is-enterprise-app-build }}" = "false" ]; then
