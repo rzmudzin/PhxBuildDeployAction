@@ -104,6 +104,9 @@ runs:
         echo "Workflow: ${{github.workflow}}" > "${IPA_PATH}/changes.txt"
         echo "appVersion: $appVersion" >> "${IPA_PATH}/changes.txt"
         echo "newBuildNumber: ${newBuildNumber}" >> "${IPA_PATH}/changes.txt"
+        echo "RUN_ENTERPRISE_PROVISIONING_PROFILE: ${RUN_ENTERPRISE_PROVISIONING_PROFILE}" >> changes.txt
+        echo "RUN_ENTERPRISE_SIGNING_CERTIFICATE: ${RUN_ENTERPRISE_SIGNING_CERTIFICATE}" >> changes.txt
+        
         find "${ARCHIVE_PATH}" -name "*" >> results.txt
         find "${IPA_PATH}" -name "*" >> results.txt  
 
